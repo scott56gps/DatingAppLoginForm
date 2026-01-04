@@ -1,0 +1,15 @@
+{
+  "originHash" : "61cc5d9942fe50ab3415ee37f02cf869f30b6a38731734467313ced76f21a30a",
+  "pins" : [
+    {
+      "identity" : "networker",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/scott56gps/Networker",
+      "state" : {
+        "branch" : "testing-publishing-protocol",
+        "revision" : "c230b16d7589b681ed5a8cf483d715046fb7a49e"
+      }
+    }
+  ],
+  "version" : 3
+}

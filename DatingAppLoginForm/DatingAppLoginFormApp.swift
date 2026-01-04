@@ -11,7 +11,7 @@ import SwiftUI
 struct DatingAppLoginFormApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ReactiveForm(model: ReactiveFormModel())
         }
     }
 }
