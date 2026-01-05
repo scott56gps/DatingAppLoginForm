@@ -67,32 +67,45 @@ class ReactiveFormModel: ObservableObject {
     
     func makeRequest() {
         let networker = Networker(
-            baseURL: "https://jsonplaceholder.typicode.com"
+            baseURL: "https://localhost:5001"
         )
-        networker.request(UserGetRequest())
+        let loginRequest = LoginRequest(email: email, password: password)
+        networker.request(loginRequest)
             .sink(receiveCompletion: { completion in
                 switch completion {
                 case .finished: print("Finished request")
                 case .failure(let error): print("Error: \(error)")
                 }
             }, receiveValue: { value in
-                print("Got User: \(value.title)")
+                print("Got token: \(value.token)")
             })
             .store(in: &cancellables)
     }
 }
 
-struct User: Codable {
-    let userId: Int
-    let id: Int
-    let title: String
-    let completed: Bool
+struct LoginResponse: Decodable {
+    let id: String
+    let email: String
+    let displayName: String
+    let token: String
+    let imageUrl: String?
 }
 
-struct UserGetRequest: RequestConvertible {
-    typealias Response = User
+struct LoginRequest: RequestConvertible {
+    typealias Response = LoginResponse
     
+    var method: HTTPMethod { .post }
+    var body: Data?
     var path: String {
-        "/todos/1"
+        "/api/account/login"
+    }
+    
+    init(email: String, password: String) {
+        body = """
+        {
+            "email": "\(email)",
+            "password": "\(password)"
+        }
+    """.data(using: .utf8)
     }
 }
