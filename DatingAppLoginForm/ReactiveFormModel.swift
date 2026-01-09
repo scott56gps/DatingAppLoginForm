@@ -24,13 +24,13 @@ class ReactiveFormModel: ObservableObject {
     var email: String = ""
     @Published var emailIsTouched = false
 
-    private var cancellables = Set<AnyCancellable>()
     @Published var isFormValid: Bool = false
     @Published var passwordsMatchError: ValidationError?
-    private let client: AuthenticatedNetworkClient
-    
-    init(client: AuthenticatedNetworkClient) {
-        self.client = client
+    private let loginClient: LoginClient
+    private var cancellables = Set<AnyCancellable>()
+
+    init(loginClient: LoginClient) {
+        self.loginClient = loginClient
         validateFields()
     }
     private func validateFields() {
@@ -68,43 +68,6 @@ class ReactiveFormModel: ObservableObject {
     }
     
     func makeRequest() {
-        let loginRequest = LoginRequest(email: email, password: password)
-        client.request(request: loginRequest)
-            .sink(receiveCompletion: { completion in
-                switch completion {
-                case .finished: print("Finished request")
-                case .failure(let error): print("Error: \(error)")
-                }
-            }, receiveValue: { value in
-                print("Got token: \(value.token)")
-            })
-            .store(in: &cancellables)
-    }
-}
-
-struct LoginResponse: Decodable {
-    let id: String
-    let email: String
-    let displayName: String
-    let token: String
-    let imageUrl: String?
-}
-
-struct LoginRequest: JSONBodyRequest {
-    typealias Response = LoginResponse
-    var method: HTTPMethod { .post }
-    var path: String {
-        "/api/account/login"
-    }
-    
-    let email: String
-    let password: String
-    var body: [String: String] {
-        ["Email": email, "Password": password]
-    }
-    
-    init(email: String, password: String) {
-        self.email = email
-        self.password = password
+        loginClient.login(email: email, password: password)
     }
 }

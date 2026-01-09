@@ -12,7 +12,10 @@ import Networker
 struct DatingAppLoginFormApp: App {
     var body: some Scene {
         WindowGroup {
-            ReactiveForm(model: ReactiveFormModel(client: JWTNetworkClient(networker: Networker(baseURL: "http://10.4.255.153:8080"))))
+            ReactiveForm(
+                model: ReactiveFormModel(
+                    loginClient: LoginClient(
+                        client: APIClient(networker: Networker(baseURL: "http://10.4.255.153:8080")))))
         }
     }
 }

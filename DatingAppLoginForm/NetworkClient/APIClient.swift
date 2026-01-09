@@ -1,15 +1,14 @@
 //
-//  JWTNetworkClient.swift
+//  APIClient.swift
 //  DatingAppLoginForm
 //
-//  Created by Scott Nicholes on 1/5/26.
+//  Created by Scott Nicholes on 1/9/26.
 //
 import Networker
 import Combine
 
-final class JWTNetworkClient: AuthenticatedNetworkClient {
+final class APIClient: NetworkClient {
     private let networker: Networker
-    private let tokenProvider = JWTTokenProvider()
     
     init(networker: Networker) {
         self.networker = networker
@@ -20,4 +19,3 @@ final class JWTNetworkClient: AuthenticatedNetworkClient {
             .eraseToAnyPublisher()
     }
 }
-
