@@ -19,6 +19,7 @@ struct ReactiveForm: View {
         Form {
             Text("Form Valid: \(model.isFormValid ? "Valid" : "Invalid")")
             TextField("Email", text: $model.email)
+                .textInputAutocapitalization(.never)
                 .textFieldStyle(RoundedBorderTextFieldStyle())
                 .lineLimit(1)
                 .multilineTextAlignment(.center)

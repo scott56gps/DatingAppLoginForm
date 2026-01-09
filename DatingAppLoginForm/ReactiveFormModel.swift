@@ -27,8 +27,10 @@ class ReactiveFormModel: ObservableObject {
     private var cancellables = Set<AnyCancellable>()
     @Published var isFormValid: Bool = false
     @Published var passwordsMatchError: ValidationError?
+    private let client: AuthenticatedNetworkClient
     
-    init() {
+    init(client: AuthenticatedNetworkClient) {
+        self.client = client
         validateFields()
     }
     private func validateFields() {
@@ -66,11 +68,8 @@ class ReactiveFormModel: ObservableObject {
     }
     
     func makeRequest() {
-        let networker = Networker(
-            baseURL: "https://localhost:5001"
-        )
         let loginRequest = LoginRequest(email: email, password: password)
-        networker.request(loginRequest)
+        client.request(request: loginRequest)
             .sink(receiveCompletion: { completion in
                 switch completion {
                 case .finished: print("Finished request")
@@ -91,21 +90,21 @@ struct LoginResponse: Decodable {
     let imageUrl: String?
 }
 
-struct LoginRequest: RequestConvertible {
+struct LoginRequest: JSONBodyRequest {
     typealias Response = LoginResponse
-    
     var method: HTTPMethod { .post }
-    var body: Data?
     var path: String {
         "/api/account/login"
     }
     
+    let email: String
+    let password: String
+    var body: [String: String] {
+        ["Email": email, "Password": password]
+    }
+    
     init(email: String, password: String) {
-        body = """
-        {
-            "email": "\(email)",
-            "password": "\(password)"
-        }
-    """.data(using: .utf8)
+        self.email = email
+        self.password = password
     }
 }
