@@ -27,16 +27,31 @@ final class JWTTokenProvider: TokenProvider {
     }
     
     func setToken(token: Data) throws {
-        let query: [CFString: Any] = [
+        let baseQuery: [CFString: Any] = [
             kSecClass: kSecClassGenericPassword,
             kSecAttrService: "com.example.DatingAppLoginForm" as CFString,
-            kSecAttrAccount: "jwttoken" as CFString,
+            kSecAttrAccount: "jwttoken" as CFString
+        ]
+        let updateAttributes: [CFString: Any] = [
             kSecValueData: token
         ]
         
-        let writeStatus = SecItemAdd(query as CFDictionary, nil)
-        guard writeStatus == errSecSuccess else {
-            throw TokenError.tokenWriteFailed
+        // First, try to update
+        let updateStatus = SecItemUpdate(
+            baseQuery as CFDictionary,
+            updateAttributes as CFDictionary)
+        
+        switch updateStatus {
+        case errSecSuccess: return
+        case errSecItemNotFound:
+            var addQuery = baseQuery
+            addQuery[kSecValueData] = token
+            let writeStatus = SecItemAdd(addQuery as CFDictionary, nil)
+            guard writeStatus == errSecSuccess else {
+                throw TokenError.tokenWriteFailed
+            }
+        default:
+            throw TokenError.tokenReadFailed
         }
     }
 }

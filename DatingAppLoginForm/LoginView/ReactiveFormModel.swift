@@ -18,14 +18,13 @@ class ReactiveFormModel: ObservableObject {
     var confirmPassword: String = ""
     @Published var confirmPasswordIsTouched = false
 
-    @Validated(
-        [.required, .custom(message: "Not a valid email") { $0.contains("@") }]
-    )
+    @Validated([.required, .custom(message: "Not a valid email") { $0.contains("@") }])
     var email: String = ""
     @Published var emailIsTouched = false
 
     @Published var isFormValid: Bool = false
     @Published var passwordsMatchError: ValidationError?
+    @Published var loginState: LoginState = .loggedOut
     private let loginClient: LoginClient
     private var cancellables = Set<AnyCancellable>()
 
@@ -68,6 +67,20 @@ class ReactiveFormModel: ObservableObject {
     }
     
     func makeRequest() {
+        loginState = .loading
         loginClient.login(email: email, password: password)
+            .sink(receiveCompletion: { [weak self] completion in
+                guard let self else { return }
+                switch completion {
+                    case .finished: break
+                    case .failure(let error):
+                    loginState = .error(error.localizedDescription)
+                    print(error)
+                }
+            }, receiveValue: { [weak self] _ in
+                guard let self else { return }
+                self.loginState = .loggedIn
+            })
+            .store(in: &cancellables)
     }
 }

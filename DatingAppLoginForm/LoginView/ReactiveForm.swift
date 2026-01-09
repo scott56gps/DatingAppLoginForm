@@ -10,7 +10,6 @@ import SwiftUI
 
 struct ReactiveForm: View {
     @ObservedObject var model: ReactiveFormModel
-    @State var showSuccess: Bool = false
     @FocusState var isEmailFocused: Bool
     @FocusState var isPasswordFocused: Bool
     @FocusState var isConfirmPasswordFocused: Bool
@@ -58,7 +57,9 @@ struct ReactiveForm: View {
                 .onChange(of: model.confirmPassword) { _ in
                     model.confirmPasswordIsTouched = true
                 }
-            if (model.confirmPasswordIsTouched && !isConfirmPasswordFocused && model.passwordsMatchError != nil) {
+            if (
+                model.confirmPasswordIsTouched && !isConfirmPasswordFocused && model.passwordsMatchError != nil
+            ) {
                 VStack {
                     ForEach(
                         model.$confirmPassword.errors,
@@ -76,13 +77,19 @@ struct ReactiveForm: View {
                             
             Button("Submit") {
                 model.makeRequest()
-                showSuccess = true
             }
             .disabled(!model.isFormValid)
             .padding()
             
-            if showSuccess {
-                Text("Form Submitted!")
+            var stateText = switch model.loginState {
+            case .loggedIn: "Logged In!"
+            case .loading: "Loading..."
+            case .loggedOut: ""
+            case .error(let errorString): errorString
+            }
+            
+            if !stateText.isEmpty {
+                Text(stateText)
                     .font(.headline)
                     .foregroundColor(.green)
                     .padding()
