@@ -81,11 +81,11 @@ struct ReactiveForm: View {
             .disabled(!model.isFormValid)
             .padding()
             
-            var stateText = switch model.loginState {
+            let stateText = switch model.loginState {
             case .loggedIn: "Logged In!"
             case .loading: "Loading..."
             case .loggedOut: ""
-            case .error(let errorString): errorString
+            case .error(let error): error.1
             }
             
             if !stateText.isEmpty {

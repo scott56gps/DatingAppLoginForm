@@ -74,7 +74,8 @@ class ReactiveFormModel: ObservableObject {
                 switch completion {
                     case .finished: break
                     case .failure(let error):
-                    loginState = .error(error.localizedDescription)
+                    let errorDescription = mapLoginErrorToDescription(error)
+                    loginState = .error((error, errorDescription))
                     print(error)
                 }
             }, receiveValue: { [weak self] _ in
@@ -82,5 +83,12 @@ class ReactiveFormModel: ObservableObject {
                 self.loginState = .loggedIn
             })
             .store(in: &cancellables)
+    }
+    
+    private func mapLoginErrorToDescription(_ error: LoginError) -> String {
+        return switch error {
+        case .invalidCredentials: "Invalid Credentials"
+        default: error.localizedDescription
+        }
     }
 }

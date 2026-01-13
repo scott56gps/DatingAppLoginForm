@@ -8,6 +8,6 @@
 enum LoginState {
     case loggedIn
     case loggedOut
-    case error(String)
+    case error((LoginError, String))
     case loading
 }

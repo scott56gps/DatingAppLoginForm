@@ -5,6 +5,7 @@
 //  Created by Scott Nicholes on 1/9/26.
 //
 import Combine
+import Networker
 import Foundation
 
 final class LoginClient {
@@ -18,7 +19,12 @@ final class LoginClient {
     func login(email: String, password: String) -> AnyPublisher<Void, LoginError> {
         let loginRequest = LoginRequest(email: email, password: password)
         return client.request(request: loginRequest)
-            .mapError { LoginError.networkError($0.localizedDescription) }
+            .mapError {
+                switch $0 {
+                case NetworkRequestError.unauthorized: LoginError.invalidCredentials
+                default: LoginError.networkError($0.self)
+                }
+            }
             .tryMap { response in
                 try self.tokenProvider.setToken(token: response.token.data(using: .utf8)!)
             }
