@@ -12,8 +12,8 @@ import Networker
 struct DatingAppLoginFormApp: App {
     var body: some Scene {
         WindowGroup {
-            ReactiveForm(
-                model: ReactiveFormModel(
+            LoginView(
+                model: LoginViewModel(
                     loginClient: LoginClient(
                         client: APIClient(networker: Networker(baseURL: "http://10.4.255.153:8080")))))
         }

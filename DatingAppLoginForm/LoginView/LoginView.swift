@@ -8,8 +8,8 @@
 import Foundation
 import SwiftUI
 
-struct ReactiveForm: View {
-    @ObservedObject var model: ReactiveFormModel
+struct LoginView: View {
+    @ObservedObject var model: LoginViewModel
     @FocusState var isEmailFocused: Bool
     @FocusState var isPasswordFocused: Bool
     @FocusState var isConfirmPasswordFocused: Bool

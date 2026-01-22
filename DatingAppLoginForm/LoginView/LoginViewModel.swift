@@ -9,7 +9,7 @@ import Combine
 import SwiftUI
 import Networker
 
-class ReactiveFormModel: ObservableObject {
+class LoginViewModel: ObservableObject {
     @Validated([.required, .minLength(4)])
     var password: String = ""
     @Published var passwordIsTouched = false
@@ -69,6 +69,7 @@ class ReactiveFormModel: ObservableObject {
     func makeRequest() {
         loginState = .loading
         loginClient.login(email: email, password: password)
+            .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { [weak self] completion in
                 guard let self else { return }
                 switch completion {
