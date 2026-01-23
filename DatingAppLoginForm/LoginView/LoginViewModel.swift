@@ -9,7 +9,7 @@ import Combine
 import SwiftUI
 import Networker
 
-class ReactiveFormModel: ObservableObject {
+class LoginViewModel: ObservableObject {
     @Validated([.required, .minLength(4)])
     var password: String = ""
     @Published var passwordIsTouched = false
@@ -18,17 +18,18 @@ class ReactiveFormModel: ObservableObject {
     var confirmPassword: String = ""
     @Published var confirmPasswordIsTouched = false
 
-    @Validated(
-        [.required, .custom(message: "Not a valid email") { $0.contains("@") }]
-    )
+    @Validated([.required, .custom(message: "Not a valid email") { $0.contains("@") }])
     var email: String = ""
     @Published var emailIsTouched = false
 
-    private var cancellables = Set<AnyCancellable>()
     @Published var isFormValid: Bool = false
     @Published var passwordsMatchError: ValidationError?
-    
-    init() {
+    @Published var loginState: LoginState = .loggedOut
+    private let loginClient: LoginClient
+    private var cancellables = Set<AnyCancellable>()
+
+    init(loginClient: LoginClient) {
+        self.loginClient = loginClient
         validateFields()
     }
     private func validateFields() {
@@ -66,46 +67,29 @@ class ReactiveFormModel: ObservableObject {
     }
     
     func makeRequest() {
-        let networker = Networker(
-            baseURL: "https://localhost:5001"
-        )
-        let loginRequest = LoginRequest(email: email, password: password)
-        networker.request(loginRequest)
-            .sink(receiveCompletion: { completion in
+        loginState = .loading
+        loginClient.login(email: email, password: password)
+            .receive(on: DispatchQueue.main)
+            .sink(receiveCompletion: { [weak self] completion in
+                guard let self else { return }
                 switch completion {
-                case .finished: print("Finished request")
-                case .failure(let error): print("Error: \(error)")
+                    case .finished: break
+                    case .failure(let error):
+                    let errorDescription = mapLoginErrorToDescription(error)
+                    loginState = .error((error, errorDescription))
+                    print(error)
                 }
-            }, receiveValue: { value in
-                print("Got token: \(value.token)")
+            }, receiveValue: { [weak self] _ in
+                guard let self else { return }
+                self.loginState = .loggedIn
             })
             .store(in: &cancellables)
     }
-}
-
-struct LoginResponse: Decodable {
-    let id: String
-    let email: String
-    let displayName: String
-    let token: String
-    let imageUrl: String?
-}
-
-struct LoginRequest: RequestConvertible {
-    typealias Response = LoginResponse
     
-    var method: HTTPMethod { .post }
-    var body: Data?
-    var path: String {
-        "/api/account/login"
-    }
-    
-    init(email: String, password: String) {
-        body = """
-        {
-            "email": "\(email)",
-            "password": "\(password)"
+    private func mapLoginErrorToDescription(_ error: LoginError) -> String {
+        return switch error {
+        case .invalidCredentials: "Invalid Credentials"
+        default: error.localizedDescription
         }
-    """.data(using: .utf8)
     }
 }

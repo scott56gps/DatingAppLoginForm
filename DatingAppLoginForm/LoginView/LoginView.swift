@@ -8,9 +8,8 @@
 import Foundation
 import SwiftUI
 
-struct ReactiveForm: View {
-    @ObservedObject var model: ReactiveFormModel
-    @State var showSuccess: Bool = false
+struct LoginView: View {
+    @ObservedObject var model: LoginViewModel
     @FocusState var isEmailFocused: Bool
     @FocusState var isPasswordFocused: Bool
     @FocusState var isConfirmPasswordFocused: Bool
@@ -19,6 +18,7 @@ struct ReactiveForm: View {
         Form {
             Text("Form Valid: \(model.isFormValid ? "Valid" : "Invalid")")
             TextField("Email", text: $model.email)
+                .textInputAutocapitalization(.never)
                 .textFieldStyle(RoundedBorderTextFieldStyle())
                 .lineLimit(1)
                 .multilineTextAlignment(.center)
@@ -57,7 +57,9 @@ struct ReactiveForm: View {
                 .onChange(of: model.confirmPassword) { _ in
                     model.confirmPasswordIsTouched = true
                 }
-            if (model.confirmPasswordIsTouched && !isConfirmPasswordFocused && model.passwordsMatchError != nil) {
+            if (
+                model.confirmPasswordIsTouched && !isConfirmPasswordFocused && model.passwordsMatchError != nil
+            ) {
                 VStack {
                     ForEach(
                         model.$confirmPassword.errors,
@@ -75,13 +77,19 @@ struct ReactiveForm: View {
                             
             Button("Submit") {
                 model.makeRequest()
-                showSuccess = true
             }
             .disabled(!model.isFormValid)
             .padding()
             
-            if showSuccess {
-                Text("Form Submitted!")
+            let stateText = switch model.loginState {
+            case .loggedIn: "Logged In!"
+            case .loading: "Loading..."
+            case .loggedOut: ""
+            case .error(let error): error.1
+            }
+            
+            if !stateText.isEmpty {
+                Text(stateText)
                     .font(.headline)
                     .foregroundColor(.green)
                     .padding()

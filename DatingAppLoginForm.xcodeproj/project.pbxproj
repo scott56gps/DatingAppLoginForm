@@ -364,7 +364,7 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/scott56gps/Networker";
 			requirement = {
-				branch = "testing-publishing-protocol";
+				branch = "json-request";
 				kind = branch;
 			};
 		};

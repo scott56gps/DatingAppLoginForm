@@ -6,8 +6,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/scott56gps/Networker",
       "state" : {
-        "branch" : "testing-publishing-protocol",
-        "revision" : "c230b16d7589b681ed5a8cf483d715046fb7a49e"
+        "branch" : "json-request",
+        "revision" : "082c9246d4943672f8d8ed6e6c2d4c512cc41120"
       }
     }
   ],
