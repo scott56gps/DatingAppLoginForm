@@ -13,6 +13,8 @@ struct LoginView: View {
     @FocusState var isEmailFocused: Bool
     @FocusState var isPasswordFocused: Bool
     @FocusState var isConfirmPasswordFocused: Bool
+    
+    let onLogin: () -> Void
 
     var body: some View {
         Form {
@@ -77,6 +79,7 @@ struct LoginView: View {
                             
             Button("Submit") {
                 model.makeRequest()
+                onLogin()
             }
             .disabled(!model.isFormValid)
             .padding()
