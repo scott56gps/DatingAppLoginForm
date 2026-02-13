@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct MatchesItemView: View {
-    var matchItem: MatchItem
+    var matchItem: Match
     
     var body: some View {
         HStack(alignment: .top) {
@@ -28,7 +28,7 @@ struct MatchesItemView: View {
 }
 
 #Preview {
-    let item = MatchItem(name: "Scott Nicholes", location: "Claremont, CA, USA", imageUrl: "sample_profile_picture")
+    let item = Match(name: "Scott Nicholes", location: "Claremont, CA, USA", imageUrl: "sample_profile_picture")
     MatchesItemView(matchItem: item)
         .frame(maxHeight: 100)
 }

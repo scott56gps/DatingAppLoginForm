@@ -8,17 +8,13 @@
 import SwiftUI
 
 struct MatchesView: View {
-    @ObservedObject var viewModel = MatchesViewModel()
+    @ObservedObject var viewModel = MatchesViewModel(client: MatchesClient())
     
     var body: some View {
         VStack {
-            List(viewModel.matchItems, id: \.name) { match in
+            List(viewModel.matches, id: \.name) { match in
                 MatchesItemView(matchItem: match)
                     .frame(maxHeight: 75)
-            }
-            TextField("New Match Name", text: $viewModel.customMatchName)
-            Button("Add Match") {
-                viewModel.addMatch()
             }
         }
     }

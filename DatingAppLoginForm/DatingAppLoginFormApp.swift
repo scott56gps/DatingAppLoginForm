@@ -30,7 +30,7 @@ struct DatingAppLoginFormApp: App {
                     }
                 )
             case .matches:
-                Text("Hola!")
+                MatchesView()
             }
         }
     }
