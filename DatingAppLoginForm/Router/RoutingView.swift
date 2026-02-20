@@ -8,28 +8,19 @@ import SwiftUI
 import Networker
 
 struct RoutingView: View {
-    @EnvironmentObject var viewState: Router
-    
+    @EnvironmentObject var router: Router
+    let dependencyBuilder: DatingAppLoginFormConfigBuilder
+        
     var body: some View {
-        switch viewState.currentView {
+        switch router.currentView {
         case .login:
-            LoginView(
-                model: LoginViewModel(
-                    loginClient: LoginClient(
-                        client: APIClient(
-                            networker: Networker(
-                                baseURL: "http://10.4.255.153:8080"
-                            )
-                        )
-                    ), router: viewState
-                )
-            )
+            dependencyBuilder.makeLoginView(router: router)
         case .matches:
-            MatchesView()
+            dependencyBuilder.makeMatchesView(router: router)
         }
     }
 }
 
-#Preview {
-    RoutingView()
-}
+//#Preview {
+//    RoutingView()
+//}
