@@ -10,28 +10,12 @@ import Networker
 
 @main
 struct DatingAppLoginFormApp: App {
-    @State var appView: AppView = .login
+    @StateObject private var viewState: Router = Router()
     
     var body: some Scene {
         WindowGroup {
-            switch appView {
-            case .login:
-                LoginView(
-                    model: LoginViewModel(
-                        loginClient: LoginClient(
-                            client: APIClient(
-                                networker: Networker(
-                                    baseURL: "http://10.4.255.153:8080"
-                                )
-                            )
-                        )
-                    ), onLogin: {
-                        appView = .matches
-                    }
-                )
-            case .matches:
-                MatchesView()
-            }
+            RoutingView()
+                .environmentObject(viewState)
         }
     }
 }

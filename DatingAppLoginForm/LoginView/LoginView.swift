@@ -14,8 +14,6 @@ struct LoginView: View {
     @FocusState var isPasswordFocused: Bool
     @FocusState var isConfirmPasswordFocused: Bool
     
-    let onLogin: () -> Void
-
     var body: some View {
         Form {
             Text("Form Valid: \(model.isFormValid ? "Valid" : "Invalid")")
@@ -79,7 +77,6 @@ struct LoginView: View {
                             
             Button("Submit") {
                 model.makeRequest()
-                onLogin()
             }
             .disabled(!model.isFormValid)
             .padding()

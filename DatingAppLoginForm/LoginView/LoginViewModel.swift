@@ -25,11 +25,14 @@ class LoginViewModel: ObservableObject {
     @Published var isFormValid: Bool = false
     @Published var passwordsMatchError: ValidationError?
     @Published var loginState: LoginState = .loggedOut
-    private let loginClient: LoginClient
+    
     private var cancellables = Set<AnyCancellable>()
+    private let loginClient: LoginClient
+    private let router: RouteModifiable
 
-    init(loginClient: LoginClient) {
+    init(loginClient: LoginClient, router: RouteModifiable) {
         self.loginClient = loginClient
+        self.router = router
         validateFields()
     }
     private func validateFields() {
@@ -82,6 +85,7 @@ class LoginViewModel: ObservableObject {
             }, receiveValue: { [weak self] _ in
                 guard let self else { return }
                 self.loginState = .loggedIn
+                self.router.showMatches()
             })
             .store(in: &cancellables)
     }
