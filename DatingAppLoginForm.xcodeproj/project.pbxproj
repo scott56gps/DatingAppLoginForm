@@ -7,10 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D2CF553D2F4F76570086E2C5 /* Debug.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = D2CF553C2F4F76570086E2C5 /* Debug.xcconfig */; };
+		D2CF553F2F4F76770086E2C5 /* Release.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = D2CF553E2F4F76770086E2C5 /* Release.xcconfig */; };
+		D2CF55412F4F76840086E2C5 /* Secrets.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = D2CF55402F4F76840086E2C5 /* Secrets.xcconfig */; };
 		D2E77B652F067A450079CA07 /* Networker in Frameworks */ = {isa = PBXBuildFile; productRef = D2E77B642F067A450079CA07 /* Networker */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		D2CF553C2F4F76570086E2C5 /* Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
+		D2CF553E2F4F76770086E2C5 /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
+		D2CF55402F4F76840086E2C5 /* Secrets.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Secrets.xcconfig; sourceTree = "<group>"; };
 		D2E77B4B2F0679180079CA07 /* DatingAppLoginForm.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DatingAppLoginForm.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -50,6 +56,9 @@
 		D2E77B422F0679180079CA07 = {
 			isa = PBXGroup;
 			children = (
+				D2CF553C2F4F76570086E2C5 /* Debug.xcconfig */,
+				D2CF553E2F4F76770086E2C5 /* Release.xcconfig */,
+				D2CF55402F4F76840086E2C5 /* Secrets.xcconfig */,
 				D2E77B4D2F0679180079CA07 /* DatingAppLoginForm */,
 				D2E77B4C2F0679180079CA07 /* Products */,
 			);
@@ -131,6 +140,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D2CF55412F4F76840086E2C5 /* Secrets.xcconfig in Resources */,
+				D2CF553D2F4F76570086E2C5 /* Debug.xcconfig in Resources */,
+				D2CF553F2F4F76770086E2C5 /* Release.xcconfig in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -149,6 +161,7 @@
 /* Begin XCBuildConfiguration section */
 		D2E77B542F06791F0079CA07 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = D2CF553C2F4F76570086E2C5 /* Debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -213,6 +226,7 @@
 		};
 		D2E77B552F06791F0079CA07 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = D2CF553E2F4F76770086E2C5 /* Release.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;

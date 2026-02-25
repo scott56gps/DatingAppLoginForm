@@ -6,12 +6,24 @@
 //
 
 import SwiftUI
+import Networker
 
 final class DatingAppLoginFormConfigBuilder {
     let apiClient: NetworkClient
     
     init(apiClient: NetworkClient) {
         self.apiClient = apiClient
+    }
+    
+    convenience init() {
+        self.init(apiClient: Self.makeDefaultNetworkClient())
+    }
+    
+    private static func makeDefaultNetworkClient() -> NetworkClient {
+        guard let baseURL = URL(string: Config.apiBaseURL) else {
+            fatalError("Invalid API base url in Config")
+        }
+        return APIClient(networker: Networker(baseURL: baseURL))
     }
     
     // MARK: - Feature Builders
